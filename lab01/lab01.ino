@@ -1,11 +1,11 @@
 
 void setup() {
   // put your setup code here, to run once:
-  setup_serial01();
+  setup_temp_ds1621();
 }
 
 
 void loop() {
-  test_value();
+  temp_ds1621_task();
 }
 
