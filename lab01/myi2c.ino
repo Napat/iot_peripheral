@@ -13,7 +13,7 @@ static void init_ds1621(int ds1621_dev){
 }
 
 static int ds1621_addr_to_cmd(boolean A2, boolean A1, boolean A0){
-  return ( 0x48 | ((A2==true)?0x04:0x00) | ((A1==true)?0x02:0x00) | ((A0==true)?0x01:0x00));
+  return ( DS1621_BASEADDR | ((A2==true)?0x04:0x00) | ((A1==true)?0x02:0x00) | ((A0==true)?0x01:0x00));
 }
 
 static float ds1621_read_byte(int ds1621_dev){

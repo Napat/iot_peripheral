@@ -5,6 +5,8 @@
 
 #include <Wire.h>
 
+#define DS1621_BASEADDR   (0x48)
+
 enum ds1621_cmd{
 	//cmd: temp control
 	DS1621_READ_TEMP 		= 0xAA,		//read dat length = 1byte
