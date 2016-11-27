@@ -13,6 +13,7 @@ void loop_nodev2_op(){
 }
 
 void setup_nodev2_iop(){
+  //Serial.begin(9600);
   pinMode( LED_RED, OUTPUT);
   pinMode( BUTTON_01, INPUT);
 }
@@ -23,5 +24,6 @@ void loop_nodev2_iop(){
   }else{
     digitalWrite( LED_RED, HIGH);
   }
+  //Serial.println(100);
   delay(100);
 }
