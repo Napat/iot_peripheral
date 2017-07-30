@@ -26,6 +26,10 @@ esp.check_fw()
 print("Hello World!")
 ```
 
+# MicroPython boot sequence
+1. run boot.py(auto add by default firmware)
+2. run main.py(can manual put to board by ampy)  
+
 # ampy: put/get/run sourcecode.py to/from board
 Ref: https://github.com/adafruit/ampy
 1. Install ampy to your host(PC/Notebook) by user pip
@@ -49,6 +53,25 @@ ampy ls
 
 To put app source code(demo_led.py) to board and run demo_led.py 
 ```
+$ cat demo_led.py
+#
+# micropython use gpio port number in sourcecode 
+# from esp8266 link: https://github.com/nodemcu/nodemcu-devkit
+# you will found that led on board is plug with GPIO16
+#
+
+from machine import Pin
+import time
+
+_led = Pin(16,Pin.OUT,value=1)
+_state = 0
+for i in range(10):
+	_state = not _state
+	_led.value(_state)
+	time.sleep(1)
+
+```
+```
 $ ampy ls
 boot.py
 $ ampy put demo_led.py
@@ -62,10 +85,6 @@ To get source file from board
 ```
 ampy get boot.py > boot.py
 ```
-
-# MicroPython boot sequence
-1. run boot.py(auto add by default firmware)
-2. run main.py(can manual put to board by ampy)  
 
 # Trick
 ## การ porting libs
