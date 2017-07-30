@@ -75,6 +75,7 @@ ampy get boot.py > boot.py
 - จะอัปเดท application(เช่น main.py) ผ่าน internet ได้มั้ยหว่า??  
 --:> ทำเป็น bootloader ช่วยอัปเกรด partition MicroPython ทั้งก้อนไปเลยดีมั้ย?   
 --:> สามารถเขียนโปรแกรม write .py ไปตรงๆได้เลยมั้ยหว่า ใช้ path ยังไงดี?  
-- ใครๆก็สามารถดูด source code .py ออกจากบอดไปได้เลยสิ จะแปลงเป็น binary ได้มั้ยละเนี่ยะ??
---:> python obfuscation น่าจะพอช่วยได้นิดนึงนะ
-
+- ใครๆก็สามารถดูด source code .py ออกจากบอดไปได้เลยสิ จะแปลงเป็น binary ได้มั้ยละเนี่ยะ??  
+--:> python obfuscation น่าจะพอช่วยได้นิดนึงนะ  
+- มี wathdog api รึเปล่า เหมือนบาง hardware เช่น esp8266 จะยังมีปัญหาเรื่องนี้อยู่นะ  
+- เขียน c เพื่อสร้างเป็น libs ให้ใช้ได้มั้ยหนอ?   
