@@ -26,3 +26,39 @@ esp.check_fw()
 print("Hello World!")
 ```
 
+# ampy: put/get/run sourcecode.py to/from board
+Ref: https://github.com/adafruit/ampy
+1. Install ampy to your host(PC/Notebook) by user pip
+```
+# windows with python2
+pip install adafruit-ampy
+
+# windows with python3
+pip3 install adafruit-ampy
+
+# other platform see ref link 
+```
+2. Windows set env and list all files in your board
+```
+# set env: select comport
+set AMPY_PORT=COM4
+# list all files in your board
+ampy ls
+```
+3. ampy put / run / get
+
+To put app source code(demo_led.py) to board and run demo_led.py 
+```
+$ ampy ls
+boot.py
+$ ampy put demo_led.py
+$ ampy ls
+boot.py
+demo_led.py
+$ ampy run demo_led.py
+```
+
+To get source file from board 
+```
+ampy get boot.py > boot.py
+```
