@@ -94,6 +94,7 @@ ampy get boot.py > boot.py
 - จะอัปเดท application(เช่น main.py) ผ่าน internet ได้มั้ยหว่า??  
 --:> ทำเป็น bootloader ช่วยอัปเกรด partition MicroPython ทั้งก้อนไปเลยดีมั้ย?   
 --:> สามารถเขียนโปรแกรม write .py ไปตรงๆได้เลยมั้ยหว่า ใช้ path ยังไงดี?  
+--:> อาจจะต้องลองใช้ไอ้นี่ดูนะ https://learn.adafruit.com/micropython-basics-esp8266-webrepl/access-webrepl
 - ใครๆก็สามารถดูด source code .py ออกจากบอดไปได้เลยสิ จะแปลงเป็น binary ได้มั้ยละเนี่ยะ??  
 --:> python obfuscation น่าจะพอช่วยได้นิดนึงนะ  
 - มี wathdog api รึเปล่า เหมือนบาง hardware เช่น esp8266 จะยังมีปัญหาเรื่องนี้อยู่นะ  
