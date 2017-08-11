@@ -7,23 +7,45 @@ By using [amphy](https://github.com/adafruit/ampy), you can put python source co
 # ESP8266 get start
 ## MicroPython firmware(binary at official website) 
 Newbie step  
-1. Go to https://micropython.org/download, select board [ESP8266](https://micropython.org/download#esp8266).
-Then download .bin file.
-2. Erase ESP8266 flash memory  
-Before flashing microPython firmware *YOU SHOULD* [erase ESP8266 flash memory](http://www.pratikpanda.com/completely-format-erase-esp8266-flash-memory/).
-To clean esp8266 flash memory(4MB) by using `blank_1MB.bin` you have to flash for 4 times,
-to the address offset 0x000000, 0x100000, 0x200000 and 0x300000.  
-3. Flashing binary to your board
-3.1 For linux user, I prefer to use esptool.py as described in [the tutorial](http://docs.micropython.org/en/latest/esp8266/esp8266/tutorial/intro.html#deploying-the-firmware).  
-3.2 For Windows user, there are many software to flashing your board.  
-3.2.1 [ESP8266Flasher](https://github.com/nodemcu/nodemcu-flasher/tree/master/Win64/Release)   
-3.2.2 [ESPFlashDownloadTool](https://espressif.com/en/support/download/other-tools)  
-4. Access python interactive prompt via serial port(baud rate: 115200)
-Additionally, you can check the firmware integrity from a MicroPython prompt (assuming you were able to flash it and --verify option doesn’t report errors):
+1. เข้าไปที่ https://micropython.org/download, select board [ESP8266](https://micropython.org/download#esp8266).
+กด download .bin file ที่ต้องการมาเก็บไว้  
+  
+2. ก่อนจะติดตั้ง micropython ลงบน ESP8266 ควรจะต้องลบ flash memory ซะก่อน [erase ESP8266 flash memory](http://www.pratikpanda.com/completely-format-erase-esp8266-flash-memory/)    
+โดยเฉพาะบอดที่เคยถูกแฟลชโปรแกรมใหญ่ๆลงไปมักจะพบปัญหาหลังจากโปรแกรม micropython เข้าไป     
+ซึ่งในที่นี้จะใช้โปรแกรม `flash_download_tools` และ binary `blank_1MB.bin` เพื่อล้างโปรแกมเก่าออกจาก ESP8266  
+เนื่องจาก ESP8266 ในที่นี้มี flash memory ขนาด 4MB ดังนั้นจะต้องทำการแฟลช `blank_1MB.bin` ลงไปยังตำแหน่ง address offset 0x000000, 0x100000, 0x200000 และ 0x300000 ดังรูป  
+  
+![alt tag](esp8266/res/howto_blank_1MB.jpg)  
+  
+3. ขั้นตอนการแฟลช binary ของ micropython ลงบน ESP8266 สามารถทำให้หลายวิธี   
+3.1 สำหรับผู้ใช้ Linux แนะนำให้ใช้วิธีโปรแกรมด้วย esptool.py ซึ่งเป็น python module 
+สามารถลงผ่าน pip ด้วยขั้นตอนในลิงค์ official [the tutorial](http://docs.micropython.org/en/latest/esp8266/esp8266/tutorial/intro.html#deploying-the-firmware) ได้เลย    
+3.2 สำหรับผู้ใช้ Windows มีโปรแกรมให้เลือกใช้หลากหลาย เช่น   
+3.2.1 ใช้ esptool.py เหมือนของ linux ซึ่งจะต้องลง python ในเครื่องด้วย  
+ซึ่งอาจจะลำบากนิดนึงสำหรับผู้ไม่ชอบ command line หรือไม่เคยใช้ python มาก่อน  
+(แต่นี่เรากำลังจะใช้ micropython กันนะ!!)   
+3.2.2 ใช้โปรแกรม [ESP8266Flasher](https://github.com/nodemcu/nodemcu-flasher/tree/master/Win64/Release) ส่วนตัวแนะนำให้ใช้โปรแกรมนี้เนื่องจากง่ายสำหรับผู้ใช้ทุกระดับ   
+   
+![alt tag](esp8266/res/flash8266.jpg)  
+   
+3.2.4 ใช้โปรแกรม [ESPFlashDownloadTool](https://espressif.com/en/support/download/other-tools) ที่ใช้ในขั้นตอนลบ flash นั่นแหละ **แต่ผมลองใช้โปรแกรมนี้ flash micropython ลง ESP8266 แล้วไม่มันเวิกแฮะ??? จริงๆก็ควรจะใช้ได้นะ อาจจะตั้งค่าอะไรผิดไป ช่างมันเถอะ**  
+  
+4. หลังจากโปรแกรมเสร็จเรียบร้อยให้ทำการปิดโปรแกรมที่ใช้แฟลชให้หมด(เพื่อการันตีว่าไม่มีใครใช้ serial port แล้ว)  
+จากนั้นใช้โปรแกรม serial port terminal ต่างๆเช่น putty/Xshell/...  
+ตั้งค่า baud rate: 115200 และเิร่มการคุย serial port เพื่อเข้าสู่ MicroPython prompt  
+เราจะเรียกโหมดนี้ว่า REPL(Read Evaluate Print Loop) ซึ่งเราสามารถตรวจสอบความสมบูรณ์ของ MicroPython firmware ได้ดังนี้  
 ```
-import esp
-esp.check_fw()
-print("Hello World!")
+>>> import esp
+>>> esp.check_fw()
+size: 612028
+md5: 7653de1969a66ed01e27fd3b18b71aa6
+True
+>>> print("Hello World!")
+Hello World!
+>>> import sys
+>>> print (sys.version)
+3.4.0
+>>> 
 ```
 
 # MicroPython boot sequence
