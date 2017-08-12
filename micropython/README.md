@@ -51,30 +51,52 @@ Hello World!
 1. โปรแกรม boot.py(ไฟล์นี้จะมีอยู่แล้วใน default firmware) จะถูกรันเป็นไฟล์แรกเมื่อ power on  
 2. โปรแกรม main.py จะถูก execute โดยอัตโนมัติหลังจากจบการทำงานของ boot.py เราสามารถใส่ไฟล์ main.py นี้เข้าไปในบอดได้ด้วย ampy ซึ่งจะกล่าวถึงในขั้นตอนถัดไป  
 
-# ampy: put/get/run sourcecode.py to/from board
-Ref: https://github.com/adafruit/ampy
-1. Install ampy to your host(PC/Notebook) by user pip
+# [Ampy](https://github.com/adafruit/ampy)  
+คือเครื่องมืออย่างง่ายสำหรับติดต่อกับ MicroPython board เช่น put/get/run sourcecode.py ผ่าน serial connection  
+Note: Advance tool/Advance user อาจจะไปใช้ [mpfshell](https://github.com/wendlers/mpfshell) ซึ่งมีความสามารถสูงกว่าเช่น   
+ซับพอตการสื่อสารผ่าน serial line/Websockets(ESP8266) และ Telnet(สำหรับ WiPy borad)  
+
+1. Install python to your host(PC/Notebook)  
+2. Install ampy to your host by user pip  
+**Windows user ควรรัน cmd ด้วยสิทธิของ administrator**  
 ```
 # windows with python2
-pip install adafruit-ampy
+> pip install adafruit-ampy
 
 # windows with python3
-pip3 install adafruit-ampy
+> pip3 install adafruit-ampy
 
-# other platform see ref link 
+# other platform see: https://github.com/adafruit/ampy
 ```
-2. Windows set env and list all files in your board
 ```
-# set env: select comport
-set AMPY_PORT=COM4
+> pip list
+adafruit-ampy (1.0.1)
+click (6.7)
+ecdsa (0.13)
+esptool (2.0.1)
+pip (9.0.1)
+pyaes (1.6.0)
+pyserial (3.4)
+setuptools (36.2.7)
+wheel (0.29.0)
+```
+3. ตรวจสอบการติดต่อสื่อสารกับ board ด้วยการแสดง python script ที่อยู่บน board   
+สำหรับผู้ใช้งาน Windows ให้ทำการตั้งค่า env ก่อนเพื่อการใช้งานที่ง่าย  
+**อย่าลืมปิดโปรแกรมอื่นๆที่ใช้ Serial port** ก่อนรัน ampy  
+```
+# Windows user please set env to select comport
+> set AMPY_PORT=COM6
+
 # list all files in your board
-ampy ls
-```
-3. ampy put / run / get
+> ampy ls
+boot.py
 
-To put app source code(demo_led.py) to board and run demo_led.py 
 ```
-$ cat demo_led.py
+3. ทดสอบคำสั่ง ampy put / run / get
+ทำการเขียนโปรแกรมไฟกระพริบ (demo_led.py) ให้เสร็จ จากนั้นทำการทดสอบเอาโปรแกรมไปรันบนบอดดังนี้ 
+ตัวอย่างโปรแกรม demo_led.py
+```
+$ cat demo_led.py  # หรือ type demo_led.py สำหรับ Windows user
 #
 # micropython use gpio port number in sourcecode 
 # from esp8266 link: https://github.com/nodemcu/nodemcu-devkit
@@ -92,6 +114,7 @@ for i in range(10):
 	time.sleep(1)
 
 ```
+ทดสอบส่งโปรแกรมเข้าไปในบอดและรันโปรแกรมด้วยคำสั่งดังนี้  
 ```
 $ ampy ls
 boot.py
@@ -102,21 +125,47 @@ demo_led.py
 $ ampy run demo_led.py
 ```
 
-To get source file from board 
+สำหรับการดึงไฟล์จาก board มาไว้ในเครื่องเราจะใช้ทริกนิดหน่อยดังนี้  
 ```
 ampy get boot.py > boot.py
 ```
 
-# Trick
-## การ porting libs
-สามารถไปดู sourcecode จากใน python ตัวปกติว่าเขียนยังไงแล้วนำมาใช้ได้นะ
+# การเปิดใช้งาน Webrepl [ref](https://learn.adafruit.com/micropython-basics-esp8266-webrepl/access-webrepl)
+โดย default แล้ว WbREPL จะถูกปิดอยู่ เราจะต้องใช้ REPL ในการตั้งค่าซะก่อนดังนี้  
+```
+>>> import webrepl_setup
+WebREPL daemon auto-start status: disabled
 
-# ข้อเสีย / ข้อสงสัยที่ยังสงสัย :P
-- จะอัปเดท application(เช่น main.py) ผ่าน internet ได้มั้ยหว่า??  
---:> ทำเป็น bootloader ช่วยอัปเกรด partition MicroPython ทั้งก้อนไปเลยดีมั้ย?   
---:> สามารถเขียนโปรแกรม write .py ไปตรงๆได้เลยมั้ยหว่า ใช้ path ยังไงดี?  
---:> อาจจะต้องลองใช้ไอ้นี่ดูนะ https://learn.adafruit.com/micropython-basics-esp8266-webrepl/access-webrepl
+Would you like to (E)nable or (D)isable it running on boot?
+(Empty line to quit)
+> E
+To enable WebREPL, you must set password for it
+New password: password
+Confirm password: password
+Changes will be activated after reboot
+Would you like to reboot now? (y/n) y
+
+```
+หลังจาก reboot เสร็จจะมี wifi radio ขึ้นมาชื่อ `MicroPython-xxxxxx` ให้ใช้ password: **micropythoN** เพื่อ connect wifi ดังกล่าว   
+สำหรับการติดต่อเข้าไปยัง Webrepl ของ esp8266 นั้นจะวิ่งผ่าน websocket ดังนั้นเราจำเป็นจะต้องมีโปรแกรม client เพื่อติดต่อเข้าไป
+1. ในกรณีที่ host(PC/Notebook) ของเรายังวิ่งออก internet ได้ (เช่นออก internet ผ่านสาย lan & wifi ต่อเข้า MicroPython-xxxxxx)  
+สามารถใช้ online client [click](http://micropython.org/webrepl/) ได้เลย
+2. ในกรณีที่ต่อ Internet พร้อมกับ connect wifi MicroPython-xxxxxx ไม่ได้ จะต้องติดตั้ง client อื่นเพิ่มเติมก่อน เช่น [micropython/webrepl](https://github.com/micropython/webrepl) , [mpfshell](https://github.com/wendlers/mpfshell)  
+
+# Trick การเขียนโปรแกรม
+## การ porting libs
+- สามารถไปดู sourcecode จากใน python ตัวปกติว่าเขียนยังไงแล้วนำมาใช้ได้นะ
+- จะอัปเดท application(เช่น main.py) ผ่าน internet ใช้ ampy คงไม่ไหว ต้องไปใช้ [mpfshell](https://github.com/wendlers/mpfshell)    
+ซึ่งจะต้อง enable webrepl ก่อนนะ    
+
+# ข้อเสีย / คำถาม   
+- ทำเป็น bootloader ช่วยอัปเกรด partition MicroPython ทั้งก้อนได้มั้ย?  
+--:> คงต้อง compile micropython เองเลยแหละมั้ง     
+- โปรแกม a.py สามารถเขียนโปรแกรม write b.py ไปตรงๆได้เลยมั้ยหว่า?  
+--:> ยังไม่ได้ลอง    
 - ใครๆก็สามารถดูด source code .py ออกจากบอดไปได้เลยสิ จะแปลงเป็น binary ได้มั้ยละเนี่ยะ??  
 --:> python obfuscation น่าจะพอช่วยได้นิดนึงนะ  
-- มี wathdog api รึเปล่า เหมือนบาง hardware เช่น esp8266 จะยังมีปัญหาเรื่องนี้อยู่นะ  
+- มี wathdog api รึเปล่า  
+--:> เหมือนบาง hardware เช่น esp8266 จะยังมีปัญหาเรื่องนี้อยู่นะ   
 - เขียน c เพื่อสร้างเป็น libs ให้ใช้ได้มั้ยหนอ?   
+--:> ยังไม่ได้หา
