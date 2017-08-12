@@ -1,8 +1,11 @@
 
+# Python  
+เป็นภาษาที่ได้รับความนิยมอย่างสูงเนื่องจากตัวภาษานั้นเข้าใจได้ง่าย Learning curve ต่ำและมีไลบรารี่ให้มากมายในหลากหลายสาขา ในปัจจุบันจึงมีการดึงเอา Python มาตรฐานมาตัดแต่งบางส่วนออกไปให้เหมาะสมกับทรัพยากรที่ microcontroller มีอยู่ซึ่งรู้จักกันในชื่อ [MicroPython](https://micropython.org/)  
+
 # MicroPython
-[MicroPython](https://micropython.org/) is a full Python compiler and runtime that runs on the bare-metal.   
-After flashing micropython to microcontroller board, e.g. esp8266, you may get an *python interactive prompt* via serial port.  
-By using [amphy](https://github.com/adafruit/ampy), you can put python source code to your board and execute program.   
+ซัพพอตบอดมาตรฐานที่ได้รับความนิยมอย่างมากเช่น ESP8266 และ[อื่นๆ](https://micropython.org/download#other)  
+หลังจากติดตั้ง MicroPython ลงใน microcontroller board เช่น ESP8266 แล้ว เราจะสามารถติดต่อกับ *python interactive prompt* ผ่าน serial port เพื่อรันคำสั่งทีละบรรทัดแบบ python shell ได้ทันที  
+นอกจากนั้นเรายังสามารถนำเอา python script ที่เป็นไฟล์ลงไปรันในบอดได้แต่จะต้องติดตั้ง tools เพิ่มเติมเช่น [amphy](https://github.com/adafruit/ampy) , [mpfshell](https://github.com/wendlers/mpfshell)    
 
 # ESP8266 get start
 ## MicroPython firmware(binary at official website) 
