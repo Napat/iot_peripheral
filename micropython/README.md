@@ -146,10 +146,16 @@ Changes will be activated after reboot
 Would you like to reboot now? (y/n) y
 
 ```
-หลังจาก reboot เสร็จจะมี wifi radio ขึ้นมาชื่อ `MicroPython-xxxxxx` ให้ใช้ password: **micropythoN** เพื่อ connect wifi ดังกล่าว   
+หลังจาก reboot เสร็จจะมี wifi radio ขึ้นมาชื่อ `MicroPython-xxxxxx` ให้ใช้ password: **micropythoN** เพื่อ connect wifi ดังกล่าว  
+  
+![alt tag](esp8266/res/img/WebREPL_wifi.jpg)  
+  
 สำหรับการติดต่อเข้าไปยัง Webrepl ของ esp8266 นั้นจะวิ่งผ่าน websocket ดังนั้นเราจำเป็นจะต้องมีโปรแกรม client เพื่อติดต่อเข้าไป
 1. ในกรณีที่ host(PC/Notebook) ของเรายังวิ่งออก internet ได้ (เช่นออก internet ผ่านสาย lan & wifi ต่อเข้า MicroPython-xxxxxx)  
-สามารถใช้ online client [click](http://micropython.org/webrepl/) ได้เลย
+สามารถใช้ online client [click](http://micropython.org/webrepl/) ได้เลย  
+  
+![alt tag](esp8266/res/img/webrepl_client_online.JPG)   
+  
 2. ในกรณีที่ต่อ Internet พร้อมกับ connect wifi MicroPython-xxxxxx ไม่ได้ จะต้องติดตั้ง client อื่นเพิ่มเติมก่อน เช่น [micropython/webrepl](https://github.com/micropython/webrepl) , [mpfshell](https://github.com/wendlers/mpfshell)  
 
 # Trick การเขียนโปรแกรม
