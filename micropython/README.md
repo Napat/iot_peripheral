@@ -133,7 +133,7 @@ $ ampy run demo_led.py
 ampy get boot.py > boot.py
 ```
 
-# การเปิดใช้งาน Webrepl [ref](https://learn.adafruit.com/micropython-basics-esp8266-webrepl/access-webrepl)
+# การเปิดใช้งาน  Webrepl และตั้งค่า password [Ref](https://learn.adafruit.com/micropython-basics-esp8266-webrepl/access-webrepl)
 โดย default แล้ว WbREPL จะถูกปิดอยู่ เราจะต้องใช้ REPL ในการตั้งค่าซะก่อนดังนี้  
 ```
 >>> import webrepl_setup
@@ -159,21 +159,53 @@ Would you like to reboot now? (y/n) y
   
 ![alt tag](esp8266/res/img/webrepl_client_online.JPG)   
   
-2. ในกรณีที่ต่อ Internet พร้อมกับ connect wifi MicroPython-xxxxxx ไม่ได้ จะต้องติดตั้ง client อื่นเพิ่มเติมก่อน เช่น [micropython/webrepl](https://github.com/micropython/webrepl) , [mpfshell](https://github.com/wendlers/mpfshell)  
+2. ในกรณีที่ต่อ Internet พร้อมกับ connect wifi MicroPython-xxxxxx ไม่ได้ จะต้องติดตั้ง client อื่นเพิ่มเติมก่อน เช่น [micropython/webrepl](https://github.com/micropython/webrepl) , [mpfshell](https://github.com/wendlers/mpfshell) 
+ตัวอย่างขั้นตอนการใช้ webrepl แบบรวดเร็วใน 3 ขั้นตอน  
+1. Download https://github.com/micropython/webrepl/archive/master.zip  
+2. Connect wifi MicroPython-xxxxxx  
+3. Extract .zip และ เปิดไฟล์ webrepl.html ด้วย Chrome หรือ Firefox browser  
+จบ  
+
+# การตั้งค่า  WIFI Access Point (AP) name และ password ใหม่  
+ชื่อ Default AP จะอยู่ในรูปแบบ `MicroPython-xxxxxx` และ password คือ  `micropythoN`  
+เราสามารถตั้งค่าใหม่ได้ดังนี้  
+```
+>>> import network;
+>>> ap = network.WLAN(network.AP_IF);
+>>> print(ap.config('essid'));
+MicroPython-0b4246
+>>> ap.active(True);
+>>> ap.config(essid='MyNewESP8266', authmode=network.AUTH_WPA_WPA2_PSK, password='mynewpassword');
+>>> print(ap.config('essid'));
+MyESP8266
+>>> 
+```
 
 # Trick การเขียนโปรแกรม
 ## การ porting libs
 - สามารถไปดู sourcecode จากใน python ตัวปกติว่าเขียนยังไงแล้วนำมาใช้ได้นะ
 - จะอัปเดท application(เช่น main.py) ผ่าน internet ใช้ ampy คงไม่ไหว ต้องไปใช้ [mpfshell](https://github.com/wendlers/mpfshell)    
-ซึ่งจะต้อง enable webrepl ก่อนนะ    
+ซึ่งจะต้อง enable webrepl ก่อนนะ     
+- โปรแกม a.py สามารถเขียนโปรแกรม write b.py ไปตรงๆได้เลยเช่น 
+```
+fo = open("foo.txt", "w")
+fo.write( "Python is a great language.\nYeah its great!!\n")
+fo.close()
+```
+ดูแล้วเป็นอะไรที่ดูเปิดกว้างมาก การอัปเกรด firmware สามารถทำได้ง่ายๆแต่ก็กลายเป็นความเสี่ยงที่จะถูก hack ได้ง่ายๆเช่นกัน ต้องระวังการถ้าโดนเข้าถึง webrepl ให้ดีๆเลย **ต้องตั้งค่า password ให้แข็งแรงเลยนะ**  
+สามารถตั้งเค่า password ใหม่ได้ดังนี้
+```
+import webrepl
+webrepl._webrepl.password("yourNewPassword")
+```
 
-# ข้อเสีย / คำถาม   
+# คำถาม   
 - ทำเป็น bootloader ช่วยอัปเกรด partition MicroPython ทั้งก้อนได้มั้ย?  
 --:> คงต้อง compile micropython เองเลยแหละมั้ง     
-- โปรแกม a.py สามารถเขียนโปรแกรม write b.py ไปตรงๆได้เลยมั้ยหว่า?  
---:> ยังไม่ได้ลอง    
-- ใครๆก็สามารถดูด source code .py ออกจากบอดไปได้เลยสิ จะแปลงเป็น binary ได้มั้ยละเนี่ยะ??  
---:> python obfuscation น่าจะพอช่วยได้นิดนึงนะ  
+  
+- source code .py สามารถแปลงเป็น binary ให้อ่านไม่ออกได้มั้ยเนี่ยะ?  
+--:> python obfuscation น่าจะพอช่วยได้หน่อย   
+
 - มี wathdog api รึเปล่า  
 --:> เหมือนบาง hardware เช่น esp8266 จะยังมีปัญหาเรื่องนี้อยู่นะ   
 - เขียน c เพื่อสร้างเป็น libs ให้ใช้ได้มั้ยหนอ?   
