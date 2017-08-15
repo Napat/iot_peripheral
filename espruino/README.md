@@ -128,5 +128,10 @@ Hello Expruino
   
 หลังจากขั้นตอนนี้เราก็จะสามารถใช้งาน Espruino javascript console ผ่านโปรแกรม Espruino Web IDE ได้แล้ว ซึ่งเราสามารถเขียนโปรแกรมฝั่งและสั่งลงไปรันบนบอร์ดได้ด้วยปุ่ม Send to Espruino  
   
+นอกจากนี้ยังมีโหมดการออกแบบโรปรแกรมด้วย Graphical Designer ซึ่งจะคล้ายๆกับ [SCRATCH](https://scratch.mit.edu/) ของ MIT ที่ออกแบบไว้สำหรับสอนเด็กๆอายุ 8-16 ขวบเขียนโปรแกรมด้วยครับ  
+  
+![alt tag](res/img/GraphicalDesigner.jpg)  
+  
+
 
 
