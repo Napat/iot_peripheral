@@ -2,15 +2,18 @@
 # เกริ่นนำ  
 เดิมทีแล้ว Javascript นั้นมักใช้เพื่อพัฒนางานในฝั่งของ Front-end แต่ในยุคปัจจุบันได้มีการทำเครื่องมือเพื่อพัฒนาให้นักพัฒนาโปรแกรมสามารถข้าม 
 platform กันได้ออกมาหลากหลายชนิดเพื่อลดเวลาในการเรียนรู้ของนักพัฒนาทั้งหน้าเก่าและหน้าใหม่ลง ไม่เว้นแต่ฝั่งของ Embedded system หรือ Internet of Things 
-ได้มีคนพัฒนาเครื่องมือเพื่อนำเอา Javascript มาใช้งานในอุปกรณ์ Microcontroller เครื่องมือหนึ่งในนั้นมีชื่อว่า [Espruino](http://www.espruino.com)   
-
+ก็มีคนพัฒนาโปรเจคเพื่อนำเอา Javascript มาใช้งานในอุปกรณ์ Microcontroller อยู่หลากหลายแพลทฟอม ตัวอย่างเช่น [Espruino](http://www.espruino.com), [Tessel](https://tessel.io/)
+, [johnny-five](http://johnny-five.io/), [nodebots](http://nodebots.io/) เป็นต้น ในที่นี้เราจะมาเรียนรู้การใช้งาน [Espruino](http://www.espruino.com) กันดู    
+  
 # Espruino firmware  
 เดิมทีแล้ว Espruino(software) ถูกพัฒนาให้ใช้งานบนบอร์ดฮาร์แวร์(hardware)ของตัวเอง สามารถสั่งซื้อได้จาก [link](http://www.espruino.com/Order) 
-แต่ hardware ดังกล่าวไม่ได้จะได้รับความนิยมมากนักจึงได้มีการพอท software ให้สามารถทำงานได้บน hardware ที่หลากหลายมากขึ้น 
-สามารถดูรายการของอุปกรณ์ที่ซัพพอตได้ที่ [link](http://www.espruino.com/Other+Boards)  
+แต่ hardware ดังกล่าวไม่ได้จะได้รับความนิยมมากนัก หลังจากนั้นได้มีการพอท software ดังกล่าวให้สามารถทำงานกับ hardware ที่หลากหลายมากขึ้น 
+สามารถตรวจสอบรายการของอุปกรณ์ที่ซัพพอตได้ที่ [link](http://www.espruino.com/Other+Boards)  
   
-จะเห็นว่า ESP8266 เป็นฮาร์แวร์หนึ่งที่ได้รับความนิยมอย่างสูงและได้รับการพอท Espruino โดยมี firmware ให้ดาว์โหลดมาใช้งานได้จากเว็บได้เลย 
-ในบทความนี้จะใช้งาน ESP8266v2 ซึ่งมี Flash 4MB เป็นหลักเนื่องจากหาง่ายและราคาคุ้มค่าที่สุด(ณ วันที่เขียน)นะครับ   
+จะเห็นว่า ESP8266 เป็นฮาร์แวร์หนึ่งที่ได้รับความนิยมอย่างสูงและได้รับการซับพอทจาก Espruino โดยตรง ซึ่งภายในเว็บไซท์จะมี firmware สำหรับ ESP8266 ให้ดาว์โหลดมาใช้งานได้จากเว็บได้เลย 
+ในบทความนี้จะใช้งาน ESP8266v2 ซึ่งมี Flash 4MB เป็นหลักนะครับ สำหรับ hardware รุ่นอื่นๆอาจจะต้องมีการปรับเปลี่ยนหารตั้งค่าบางอย่างบ้าง  
+  
+![alt tag](res/img/esp8266v2.jpg)   
   
 # Requirements list
 1.Python3  
@@ -142,4 +145,6 @@ Hello Expruino
 | [WiFi Clinet](esp8266v2/wificlientWithBlink.js)     				                 | A simple example to **connect** to a **Wi-Fi AP** and make the NodeMCU board available through **espruino.local**                   	|
 | [DHTxx: Humidity&Temperature](esp8266v2/humidityTemperatureDHTxxModule.js)     	 | Humidity&Temperature sensor module to be json string           |
 
+
+สำหรับตัวอย่างการใช้งานเพิ่มเติมสามารถดูเพิ่มเติมได้ที่ [Official Link](https://www.espruino.com/Tutorials) ครับ  
 
