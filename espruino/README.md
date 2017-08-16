@@ -132,6 +132,14 @@ Hello Expruino
   
 ![alt tag](res/img/GraphicalDesigner.jpg)  
   
-
+สามารถแสดงสถานะ memory ปัจจุบันได้ด้วยการใช้คำสั่ง `process.memory()` ลงใน serial port terminal  
+  
+  
+## Examples
+| Title     							              	      | Description        											                              |
+|-----------------------------------------------|-----------------------------------------------------------------------|
+| [Blink](esp8266v2/blinkled.js)     				                                 | A simple example to blink LED in **memory**(not save flash)                	|
+| [WiFi Clinet](esp8266v2/wificlientWithBlink.js)     				                 | A simple example to **connect** to a **Wi-Fi AP** and make the NodeMCU board available through **espruino.local**                   	|
+| [DHTxx: Humidity&Temperature](esp8266v2/humidityTemperatureDHTxxModule.js)     	 | Humidity&Temperature sensor module to be json string           |
 
 
