@@ -31,5 +31,5 @@ function initall(){
   initdht();
 }
 
-E.on("init",  initall() );
+E.on("init",initall());
 save();

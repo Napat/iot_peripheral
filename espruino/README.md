@@ -142,9 +142,41 @@ Hello Expruino
 | Title     							              	      | Description        											                              |
 |-----------------------------------------------|-----------------------------------------------------------------------|
 | [Blink](esp8266v2/blinkled.js)     				                                 | A simple example to blink LED in **memory**(not save flash)                	|
-| [WiFi Clinet](esp8266v2/wificlientWithBlink.js)     				                 | A simple example to **connect** to a **Wi-Fi AP** and make the NodeMCU board available through **espruino.local**                   	|
-| [DHTxx: Humidity&Temperature](esp8266v2/humidityTemperatureDHTxxModule.js)     	 | Humidity&Temperature sensor module to be json string           |
-
-
-สำหรับตัวอย่างการใช้งานเพิ่มเติมสามารถดูเพิ่มเติมได้ที่ [Official Link](https://www.espruino.com/Tutorials) ครับ  
-
+| [WiFi client](esp8266v2/wificlientWithBlink.js)     				                 | Connect to wifi APand make the NodeMCU board. [Wifi api Reference](http://www.espruino.com/Reference#Wifi)                  	|
+| [DHTxx: Humidity & Temperature](esp8266v2/humidityTemperatureDHTxxModule.js)     	 | Humidity&Temperature sensor module to be json string           |
+| [Led controller over http webserver](esp8266v2/httpWifiLed.js)     	                         | Webserver to on/off led or devices           |
+| [IFTTT Webhook](esp8266v2/ifttt_app.js)     	                                     | Webhook to IFTTT to do something like line notify           |
+  
+  
+ตัวอย่างการใช้งานสามารถหาอ่านเพิ่มเติมได้ที่ [Official Link](https://www.espruino.com/Tutorials)
+  
+#### ระวัง  
+โดย default แล้วหลังจากเชื่อมต่อเข้ากับ wifi แล้วเราสามารถ telnet เข้าไปที่ ip address ของบอร์ดเพื่อเข้าสู่ javascript console ในโหมด telnet ได้ทันทีโดยไม่มี password ใดๆเลย หากไม่ได้ใช้ฟีเจอร์นี้ควรทำการปิดด้วยนะครับ  
+  
+# สรุป  
+เราสามารถใช้งาน javascript เพื่อทดสอบต่างๆได้อย่างรวดเร็วและง่ายมากๆ  
+จากตัวภาษาซึ่งสามารถเรียนรู้ได้ง่ายอยู่แล้วเมื่อมารวมเข้ากับ library  
+ซึ่งมีคนทำเอาไว้ให้ใช้งานอีกจำนวนหนึ่งทำให้เมื่อเปรียบเทียบความยาวของโค๊ดกับภาษาอื่นๆก็ถือว่าสั้นมากๆเลย  
+เราสามารถสร้าง application ที่ติดต่อกับ web หรือ internet technology ได้อย่างรวดเร็วสมชื่อ javascript  
+  
+**แต่** จากที่ลองใช้งานดูรู้สึกขัดใจชัดเจนในเรื่องความไม่เสถียรหลายๆเรื่อง  
+มักเกิด error แปลกๆหรือปัญหาประหลาดๆโผล่มาแล้วก็หายไปเยอะมากทั้งๆที่ลองกับ ESP8266 ซึ่งน่าจะเป็นที่นิยมที่สุดในเวลานี้แล้ว  
+(ถ้าจะเสถียรกว่านี้คงต้องใช้ hardware ของทาง ESPRUINO ที่เกริ่นไว้ในตอนต้นแล้วแหละ)  
+รวมไปถึงเรื่องที่ ESP8266 [ไม่สามารถใช้งาน watchdog](http://forum.espruino.com/conversations/782/) ได้  
+  
+มันเป็นปัญหาใหญ่มากๆเลยนะสำหรับการออกแบบโปรดักซ์ในระดับมืออาชีพ  
+เท่าที่คุยกับคนที่อาจจะเข้ามาเพราะจากกระแส IoT ฟีเวอร์ดูแล้วค่อนข้างเป็นห่วงมากที่ไม่ค่อยให้ความสำคัญในเรื่องนี้เท่าที่ควรเลย  
+ทั้งๆที่มันเป็นเรื่องสำคัญมากที่สุดเรื่องหนึ่งในการออกแบบ embedded system ที่มักจะทำงานอยู่เงียบๆ  
+หลายๆคนบอกว่าใช้งานรันเป็นปีๆแล้วไม่เห็นเป็นอะไร  
+หลายคนบอกว่าไม่ได้ใช้ในโรงงานหรือที่ๆมีคลื่นหรือกระแสรบกวนแรงๆเลยไม่กังวล  
+ซึ่งมันเป็นการปลูกฝัง mindset ที่อันตรายมากนะ ที่คุณรันเป็นปีๆรู้ได้ไงว่ามันทำงานได้อยู่จริงๆอยู่กี่ชั่วโมง?  
+ลองนึกถึงถ้า internet จาก ISP ใช้งานไม่ได้ซักชั่วโมงนึงคนจะบ่นกันขนาดไหน?  
+ลองนึกถึงถ้่าหากคุณรีโมทมาไปดูกล้องที่บ้านไม่ได้ซักสองชั่วโมงละ?  
+ลองนึกถึงตู้เติมเงินนี่สามวันดีสี่วันไข้ดูสิ  
+ลองนึกถึงโปรดักซ์ที่เกี่ยวกับชีวิตคนดู...   
+  
+บ่นยาวไปหน่อย สรุปของสรุปก็คือ ณ เวลาที่เขียนผมมองว่า ESPRUINO ยังคงเป็นแพลตฟอร์มที่ฉาบฉวยอยู่มาก  
+อาจจะยังเหมาะกับแค่งาน prototype แบบเร็วๆเท่านั้น  
+ถ้ายังแก้ปัญหาจุกจิกหรือทำให้มันรันได้เสถียรกว่านี้ไม่ได้คงไม่แนะนำศึกษาจริงจังหรือเอามาใช้ทำงานครับ  
+เอาเวลาไปใส่ในอะไรที่รับประกันคุณภาพได้จะคุ้มค่ากว่านะ  
+    
