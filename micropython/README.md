@@ -215,8 +215,8 @@ fo.close()
 ```
 
 เนื่องจากมันเป็น interpreter ซึ่งดูแล้วเป็นอะไรที่ดูเปิดกว้างให้ทำอะไรได้หลายอย่างมากทั้งดีและไม่ดีเช่น    
-สามารถเขียน code ไปอัปเกรด firmware ได้ง่ายๆเลยแต่ก็กลายเป็นความเสี่ยงที่จะถูก hack เช่นกัน  
-
+สามารถเขียน code ไปอัปเกรด firmware ได้ง่ายๆเลยแต่ก็กลายเป็นความเสี่ยงที่จะถูก hack เช่นกันหากจะนำไฟล์ .py ไปวางไว้โต้งๆ ควรใช้งาน [cross compile tools](#cross-compile-tools) เพื่อป้องกัน source code เพิ่มเติม  
+  
 ต้องระวังการถ้าโดนเข้าถึง WebREPL ให้ดีๆด้วย **จะต้องตั้งค่า password ให้แข็งแรงเลย**  
 การตั้งค่า password WebREPL ใหม่ได้ดังนี้
 
@@ -224,14 +224,22 @@ fo.close()
 import webrepl
 webrepl._webrepl.password("yourNewPassword")
 ```
+  
+# cross compile tools  
+การนำไฟล์ source code ที่เป็น plain text นามสกุล .py ไปติดตั้งลงในบอดเลยจะดูไม่ปลอดภัยนักเนื่องจากสามารถเห็น source code การทำงานได้ทั้งหมด อีกทั้งเรื่องความเร็วในการทำงานของ python เองก็นับได้ว่าช้ามากๆ เราาสามารถ compile ไฟล์ python module นามสกุล .py ไปเป็น .mpy ก่อนแล้วค่อยนำไปใช้งานได้ **ยกเว้นไฟล์ main.py** ที่ระบบเรียกหาในขั้นตอน boot system ขึ้นมา  
+  
+```
+$ ./mpy-cross foo.py
+$ ls foo.mpy
+foo.mpy
+``` 
+  
+ในไฟล์โปรแกรมหลักที่เรียกใช้งาน module สามารถใช้การ `import foo` ได้เหมือนเดิม สามารถดู source code และวิธีใช้งาน mpy-cross เพิ่มเติมได้ที่ [link](https://github.com/micropython/micropython/tree/master/mpy-cross)    
+  
 
 # คำถาม ?  
-- ทำเป็น bootloader ช่วยอัปเกรด partition MicroPython ทั้งก้อนได้มั้ย?  
---:> คงต้อง compile micropython เองใหม่เลยแหละมั้งเนี่ยะ     
-  
-- source code .py สามารถแปลงเป็น binary ให้อ่านไม่ออกได้มั้ย?  
---:> python obfuscation ไปก่อนละกัน     
-
+- ทำ bootloader อัปเกรดเป็น partition MicroPython ได้มั้ย?  
+--:> คงต้อง compile micropython เองใหม่เลยแหละมั้ง วิธี upgrade firmware ที่นึกออกก็คงต้อง download ไฟล์ใหม่มาให้เสร็จแล้วค่อย confirm ว่าจะใช้ไฟล์ใหม่นะ            
 - มี wathdog api รึเปล่า  
 --:> เหมือนบาง hardware เช่น esp8266 จะยังมีปัญหาเรื่องนี้นะ เป็นปัญหาใหญ่เลยนะ  
 
