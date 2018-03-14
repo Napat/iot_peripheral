@@ -1,5 +1,5 @@
 
-#include "FS.h"
+#include "spiffsapi.h"
 
 #define FILE_AUTH   "/dat/auth.conf"
 File fd_auth;
@@ -10,12 +10,11 @@ void setup()
   Serial.begin(115200);
   Serial.println();
 
-  // mount fs
-  SPIFFS.begin();
+  spiffsapi_init();
 
-  auth_exist = SPIFFS.exists(FILE_AUTH);
+  auth_exist = spiffsapi_isfileexits(FILE_AUTH);
 
-  if(!auth_exist)
+  if (!auth_exist)
   {
     Serial.println(FILE_AUTH);
     Serial.println("File doesn't exist yet. Creating it");
@@ -32,6 +31,10 @@ void setup()
     fd_auth.println("password=1234567890");  
     fd_auth.close();
   }
+
+  Serial.println("+++++++++++++++++++++++++++");
+  String str = spiffsapi_tree();
+  Serial.println(str);
 
   // Open for reading
   fd_auth = SPIFFS.open(FILE_AUTH, "r"); 

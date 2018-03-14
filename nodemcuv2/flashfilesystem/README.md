@@ -37,5 +37,5 @@ References
 - [esp8266 FS doc: web](http://esp8266.github.io/Arduino/versions/2.0.0/doc/filesystem.html)
 - [SPIFF FS arduino header](https://github.com/esp8266/Arduino/blob/master/cores/esp8266/FS.h#L125)
 - [SPIFF official](https://github.com/pellepl/spiffs)
-- [FTP access FS]( https://diyprojects.io/esp8266-ftp-server-spiffs-file-exchange-rapid-development-web-server/#.WoE3dqiWaUk)
+- [FTP access FS](https://diyprojects.io/esp8266-ftp-server-spiffs-file-exchange-rapid-development-web-server/#.WoE3dqiWaUk)
 - [Arduino IDE direct access SPIFF](http://www.instructables.com/id/Using-ESP8266-SPIFFS/)  
