@@ -6,6 +6,7 @@ Flash layout
     ^              ^       ^               ^     ^
     Sketch    OTA update   File system   EEPROM  WiFi config (SDK)
 ```    
+Note: [esp8266 memory map](https://github.com/esp8266/esp8266-wiki/wiki/Memory-Map)  
 
 
 SPI Flash File System for esp8266 
@@ -33,6 +34,7 @@ Note: *อย่าลืมปิดหน้าต่าง serial port monito
 
 References
 -----------
+- [esp8266 memory map](https://github.com/esp8266/esp8266-wiki/wiki/Memory-Map)
 - [esp8266 FS doc: git]( https://github.com/esp8266/Arduino/blob/master/doc/filesystem.rst)
 - [esp8266 FS doc: web](http://esp8266.github.io/Arduino/versions/2.0.0/doc/filesystem.html)
 - [SPIFF FS arduino header](https://github.com/esp8266/Arduino/blob/master/cores/esp8266/FS.h#L125)
