@@ -10,13 +10,13 @@ JSON (JavaScript Object Notation) คือ รูปแบบของข้อ
 Arduino with JSON
 -----
 เนื่องจากภาษา C/C++ ไม่มีความสามารถในการจัดการข้อมูล JSON ติดมากับภาษาดังนั้นจำเป็นจะต้องอาศัย library เพิ่มเติมเพื่อช่วยในการเขียนโปรแกรม  
-สำหรับ Arduino platform นั้นมี JSON library ซึ่งถูกพัฒนาด้วย C++ ที่ชื่อว่า [ArduinoJson](https://github.com/bblanchon/ArduinoJson)  
-ซึ่งได้ถูกใช้งานในการพัฒนาโปรแกรมของ Arduino อย่างแพร่หลายเนื่องจากมี [example](https://github.com/bblanchon/ArduinoJson/tree/master/examples)  
-ให้เรียบร้อยสามารถใช้งานได้อย่างสะดวกสบาย  
 
-สำหรับในฝั่งของภาษา C นั้นก็มี library สำหรับจัดการข้อมูล json อยู่หลากหลายตัวแต่ตัวที่ผู้เขียนชอบและใช้บ่อยที่สุดคือ [cJSON](https://github.com/Napat/cJSON)  
-จริงๆต้องโน๊ตไว้ก่อนว่า library ตัวนี้ถูกพัฒนาขึ้นมาบนมาตรฐาน ANSI C (C89, C90) การนำไปใช้กับ compile ที่เป็น C++ อาจจะพบปัญหาก็ได้(แต่ยังไม่เคยเจอนะ) 
+ในฝั่งของภาษา C++ นั้นมี JSON library ที่ถูกออกแบบมาเพื่อใช้กับ Arduino platform ซึ่งถูกใช้อย่างแพร่หลายชื่อว่า [ArduinoJson](https://github.com/bblanchon/ArduinoJson)  
+มี [examples](https://github.com/bblanchon/ArduinoJson/tree/master/examples) ให้เรียบร้อยสามารถใช้งานได้อย่างสะดวกสบาย 
+แต่ก็มีพื้นฐานบางอย่างที่ต้องทำความเข้าใจเพิ่มเติมอยู่บ้าง อ่านต่อได้ใน [subfolder arduinoJson](arduinoJson)     
+
+สำหรับในฝั่งของภาษา C เองก็มี library สำหรับจัดการข้อมูล json อยู่มากมายหลายตัวแต่ตัวที่ผู้เขียนชอบและใช้บ่อยที่สุดคือ [cJSON](https://github.com/Napat/cJSON)  
+โดยต้องโน๊ตไว้ก่อนว่า library ตัวนี้ถูกพัฒนาขึ้นมาบนมาตรฐาน ANSI C (C89, C90) การนำไปใช้กับ compile ที่เป็น C++ อาจจะพบปัญหาก็ได้(แต่ยังไม่เคยเจอนะ) 
 สามารถอ่านรายละเอียดการใช้งานภาษาไทยได้ที่ [link](https://github.com/Napat/c_concept/tree/master/usinglib_cjson)  
-หรือดูตัวอย่างจาก subfolder ของ cJSON ได้เลยครับ 
+หรือดูตัวอย่างการนำมาใช้ได้บน arduino platform ได้ใน [subfolder ของ cJSON](cJsonWithArduino) ได้เลยครับ 
 
-ตัดจบ วิ๊งงง...
