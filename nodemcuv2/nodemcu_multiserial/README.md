@@ -1,10 +1,35 @@
 
-Software serial สำหรับ nodemcu(esp8266) จำเป็นจะต้องติดตั้งเพิ่มเติม โดยให้เซิด libs ว่า `SoftwareSerial by Peter Lerup`
-ก็จะสามารถใช้งานบน nodemcu ได้เหมือนกับบนบอด arduino ทั่วๆไป 
-เพียงแต่มีข้อควรระวังในขั้นตอนการ developer บ้างเล็กน้อยหากต้อง dev ร่วมกันหลายๆบอด 
+การติดตั้ง
+-----
+การติดตั้ง Software serial สำหรับ nodemcu(esp8266) 
+มีสิ่งที่ต้องระวังหากมีการใช้หรือติดตั้ง Software serial library สำหรับบอด arduino อื่นๆลงใน Arduino IDE ด้วย
+สามารถรายละเอียดอ่านได้ในหัวข้อ [CAUTION](#CAUTION)  
+  
+โดยทั่วไปแล้วสามารถติดตั้งด้วย Manage libraries ของ Arduino ได้โดยให้เซิดหา `SoftwareSerial by Peter Lerup`
+ก็จะสามารถติดตั้งตั้งได้เรียบร้อยและสามารถใช้งานได้ดีในระดับหนึ่ง
+**แต่** Software serial ที่ได้จากการติดตั้งด้วยวิธีดังกล่าวณ.เวลาเที่เขียนจะเป็น version เก่า 1.0.0(ไม่ใช่ตัวใหม่ๆ) 
+หากไปดูที่ [github repository](https://github.com/plerup/espsoftwareserial) ต้นทางได้มีการอัปเกรดไปไกลมากแล้ว(version 3.4.x)
+หากใช้งาน version 1.0.0 อาจจะเจอปัญหาหลายๆอย่างได้ เช่น [issues/70](https://github.com/plerup/espsoftwareserial/issues/70) เป็นต้น
+
+ดังนั้นผู้เขียนขอแนะนำให้ upgrade sourcecode ตามใน github repository ต้นทางด้วย
+ขออธิบายการอัปเกรดไว้สำหรับมือใหม่ที่อาจจะยังไม่ทราบว่าต้องทำอย่างไรไว้ดังนี้
+### กรณีที่ 1. เคยติดตั้ง `SoftwareSerial by Peter Lerup` ผ่าน Manage libraries ไปแล้ว
+1.1 ค้นหาตำแหน่งที่ติดตั้ง sourecode ในเครื่องให้เจอซะก่อน เช่น  
+```
+C:\Users\Napat\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\2.4.1\libraries\SoftwareSerial
+```  
+1.2 ให้ download sourcecode จาก [github repository](https://github.com/plerup/espsoftwareserial)
+ขั้นตอนนี้จะสังเกตได้ว่าโครงสร้างไฟล์ที่ download ลงมาจะเหมือนๆกับในห้อง `...\libraries\SoftwareSerial`  
+1.3 ลบไฟล์ทั้งหมดใน `...\libraries\SoftwareSerial` แล้วนำไฟล์ที่ download มาใหม่ใส่ลงไปแทนที่  
+1.4 restart Adduino IDE
+
+### กรณีที่ 2. **ไม่**เคยติดตั้ง `SoftwareSerial by Peter Lerup` ผ่าน Manage libraries มาก่อน
+2.1 download sourcecode จาก [github repository](https://github.com/plerup/espsoftwareserial) ในรูปแบบไฟล์ .zip  
+2.2 Sketch > Include Library > Add .ZIP Library แล้วเลือกไฟล์ที่ download มาจาก github  
+2.3 restart Adduino IDE
 
 CAUTION
------------------------
+-----
 
 #### Issue
 SoftwareSerial.h มีหลาย Libs ใช้ชื่อเดียวกัน
