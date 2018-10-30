@@ -17,9 +17,12 @@ void scheduler_milis_atom()
     // accounting for rollover(overflow) with subtraction!
     if ((unsigned long)(mil_cur - mil_pre) >= INTERVAL_ATOM)
     {
-        cnt_for_10msec++;
-        cnt_for_100msec++;
-        cnt_for_sec++;
+        uint16_t tocnt  = (unsigned long)(mil_cur - mil_pre) / INTERVAL_ATOM;
+        //Serial.printf("xxxxx %u\n", tocnt);
+        
+        cnt_for_10msec  = cnt_for_10msec + tocnt;
+        cnt_for_100msec = cnt_for_100msec + tocnt;
+        cnt_for_sec     = cnt_for_sec + tocnt;
 
         scheduler_1msec = 1;
 
