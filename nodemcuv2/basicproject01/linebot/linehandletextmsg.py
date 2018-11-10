@@ -25,7 +25,7 @@ template_env = Environment(
     autoescape=select_autoescape(['html', 'xml', 'json'])
 )
 
-def linehandle_txtmsg(line_bot_api, event, txtmsg, replyToken, userId):
+def linehandle_txtmsg(microgear, line_bot_api, event, txtmsg, replyToken, userId):
     # print(f'msg: {txtmsg} / {txtmsg} / {replyToken} / {userId}')
     '''
     line_bot_api.reply_message(
@@ -35,13 +35,13 @@ def linehandle_txtmsg(line_bot_api, event, txtmsg, replyToken, userId):
         uid_roona_joe_jj, TextSendMessage(text='Hello World!'))
     '''
 
-    if(isgreeting(line_bot_api, event, txtmsg, replyToken, userId) == True):
+    if(isgreeting(microgear, line_bot_api, event, txtmsg, replyToken, userId) == True):
         return True
     
-    if(isknownintent(line_bot_api, event, txtmsg, replyToken, userId) == True):
+    if(isknownintent(microgear, line_bot_api, event, txtmsg, replyToken, userId) == True):
         return True
 
-    if(isknownintentsample(line_bot_api, event, txtmsg, replyToken, userId) == True):
+    if(isknownintentsample(microgear, line_bot_api, event, txtmsg, replyToken, userId) == True):
         return True
 
     replymsg = f"RooNa ไม่เข้าใจว่า {txtmsg} หมายถึงอะไร"
@@ -55,7 +55,7 @@ GREETING_KEYWORDS = ("hello", "hi", "greetings", "sup", "what's up", "ขอม�
 GREETING_RESPONSES = ["'sup bro", "hey", "*nods*", "hey you get my snap?"]
 
 
-def isgreeting(line_bot_api, event, txtmsg, replyToken, userId):
+def isgreeting(microgear, line_bot_api, event, txtmsg, replyToken, userId):
     """If any of the words in the user's input was a greeting, return True"""
     for word in txtmsg.split(" "):
         if word.lower() in GREETING_KEYWORDS:
@@ -67,80 +67,99 @@ def isgreeting(line_bot_api, event, txtmsg, replyToken, userId):
             # "not found"
             return False
 
-def isknownintent(line_bot_api, event, txtmsg, replyToken, userId):
+def isknownintent(microgear, line_bot_api, event, txtmsg, replyToken, userId):
     if "menu" in txtmsg.lower():
-        template = template_env.get_template('carouselcontroller.json')
+        template = template_env.get_template('mainmenu.json')
         myjson = json.loads( template.render())
-        replysticker = FlexSendMessage(
+        replymsg = FlexSendMessage(
             alt_text='user',
             contents=CarouselContainer.new_from_json_dict(myjson)
         )
-        line_bot_api.reply_message(replyToken, replysticker)
+        line_bot_api.reply_message(replyToken, replymsg)
+        #microgear.publish('/linemails', "Halo")
         return True
     
+    elif "งง" in txtmsg.lower() or "help" in txtmsg.lower():
+        replymsg = """
+        menu: เรียกดู menu
+        help: เรียกดูตัวอย่าง
+        """
+        line_bot_api.reply_message(replyToken, TextSendMessage(text=replymsg))
+        return True
+
     return False
 
 
 ######################## zone example ##########################
-def isknownintentsample(line_bot_api, event, txtmsg, replyToken, userId):
+def isknownintentsample(microgear, line_bot_api, event, txtmsg, replyToken, userId):
 
     if "กินอะไร" in txtmsg or "หิว" in txtmsg:
         replymsg = "กินข้าวไข่เจียว"
         line_bot_api.reply_message(replyToken, TextSendMessage(text=replymsg))
         return True
 
-    if "เปิดไฟ" in txtmsg.lower():
-        if "หน้าบ้าน" in txtmsg.lower():
-            replymsg = "เปิดเรียบร้อยครับท่าน"
-            line_bot_api.reply_message(
-                replyToken, TextSendMessage(text=replymsg))
+    if "เปิด" in txtmsg.lower():
+        if "ไฟ" in txtmsg.lower() and "หน้าบ้าน" in txtmsg.lower():
+            replymsg = TextSendMessage(text="เปิดเรียบร้อยครับท่าน")
+            #replymsg = StickerSendMessage(package_id=2, sticker_id=179)
+            line_bot_api.reply_message(replyToken, replymsg)
             return True
-        elif "ในครัว" in txtmsg.lower():
-            replymsg = "เปิดเรียบร้อยครับท่าน"
-            line_bot_api.reply_message(
-                replyToken, TextSendMessage(text=replymsg))
+        elif "โคมไฟ" in txtmsg.lower() and "ห้องนั่งเล่น" in txtmsg.lower():
+            #replymsg = TextSendMessage(text="เปิดเรียบร้อยครับท่าน")
+            replymsg = StickerSendMessage(package_id=2, sticker_id=179)
+            line_bot_api.reply_message(replyToken, replymsg)
+            return True
+        elif "พัดลม" in txtmsg.lower() and "ห้องรับแขก" in txtmsg.lower():
+            #replymsg = TextSendMessage(text="เปิดเรียบร้อยครับท่าน")
+            replymsg = StickerSendMessage(package_id=1, sticker_id=119)
+            line_bot_api.reply_message(replyToken, replymsg)
             return True
         else:
-            replymsg = "ระบุตำแหน่งเช่น หน้าบ้าน/ในครัว ด้วยครับ"
+            replymsg = "กรุณาระบุอุปกรณ์เช่น ไฟ/โคมไฟ/พัดลม และตำแหน่งเช่น หน้าบ้าน/ห้องนั่งเล่น/ห้องรับแขก ด้วยครับ"
             line_bot_api.reply_message(
                 replyToken, TextSendMessage(text=replymsg))
             return True
 
-    if "ปิดไฟ" in txtmsg.lower():
-        if "หน้าบ้าน" in txtmsg.lower():
-            replymsg = "ปิดเรียบร้อยครับท่าน"
-            line_bot_api.reply_message(
-                replyToken, TextSendMessage(text=replymsg))
+    if "ปิด" in txtmsg.lower():
+        if "ไฟ" in txtmsg.lower() and "หน้าบ้าน" in txtmsg.lower():
+            #replymsg = TextSendMessage(text="ปิดเรียบร้อยครับท่าน")
+            replymsg = StickerSendMessage(package_id=1, sticker_id=116)
+            line_bot_api.reply_message(replyToken, replymsg)
             return True
-        elif "ในครัว" in txtmsg.lower():
-            replymsg = "ปิดเรียบร้อยครับท่าน"
-            line_bot_api.reply_message(
-                replyToken, TextSendMessage(text=replymsg))
+        elif "โคมไฟ" in txtmsg.lower() and "ห้องนั่งเล่น" in txtmsg.lower():
+            #replymsg = TextSendMessage(text="ปิดเรียบร้อยครับท่าน")
+            replymsg = StickerSendMessage(package_id=1, sticker_id=114)
+            line_bot_api.reply_message(replyToken, replymsg)
             return True
+        elif "พัดลม" in txtmsg.lower() and "ห้องรับแขก" in txtmsg.lower():
+            #replymsg = TextSendMessage(text="ปิดเรียบร้อยครับท่าน")
+            replymsg = StickerSendMessage(package_id=1, sticker_id=136)
+            line_bot_api.reply_message(replyToken, replymsg)
+            return True            
         else:
-            replymsg = "ระบุตำแหน่งเช่น หน้าบ้าน/ในครัว ด้วยครับ"
+            replymsg = "ระบุตำแหน่งเช่น หน้าบ้าน/ห้องนั่งเล่น ด้วยครับ"
             line_bot_api.reply_message(
                 replyToken, TextSendMessage(text=replymsg))
             return True
 
     # sticker: https://devdocs.line.me/files/sticker_list.pdf
     if "เหนื่อยจัง" in txtmsg.lower():
-        replysticker = StickerSendMessage(package_id=2, sticker_id=47)
-        line_bot_api.reply_message(replyToken, replysticker)
+        replymsg = StickerSendMessage(package_id=2, sticker_id=47)
+        line_bot_api.reply_message(replyToken, replymsg)
         return True
 
     # image : ImageSendMessage
     if "ขอรูปหน่อย" in txtmsg.lower():
-        replysticker = ImageSendMessage(
+        replymsg = ImageSendMessage(
             preview_image_url='https://vignette.wikia.nocookie.net/disney/images/5/52/Roo_Winnie_the_Pooh.jpg',
             original_content_url='https://vignette.wikia.nocookie.net/disney/images/f/f5/Tigger-movie-disneyscreencaps.com-2583.jpg'
         )
-        line_bot_api.reply_message(replyToken, replysticker)
+        line_bot_api.reply_message(replyToken, replymsg)
         return True
 
     # QuickReply & QuickReplyButton
     if "ตัวอย่างQuickReply" in txtmsg.lower():
-        replysticker = TextSendMessage(
+        replymsg = TextSendMessage(
             text='Hello, world',
             quick_reply=QuickReply(items=[
             QuickReplyButton(
@@ -170,7 +189,7 @@ def isknownintentsample(line_bot_api, event, txtmsg, replyToken, userId):
                     label="Selectlocation")
             ),
         ]))
-        line_bot_api.reply_message(replyToken, replysticker)
+        line_bot_api.reply_message(replyToken, replymsg)
         return True
 
     # flex: https://developers.line.me/en/docs/messaging-api/flex-message-elements/
@@ -193,22 +212,22 @@ def isknownintentsample(line_bot_api, event, txtmsg, replyToken, userId):
 
         template = template_env.get_template('bubble01.json')
         myjson = json.loads( template.render())
-        replysticker = FlexSendMessage(
+        replymsg = FlexSendMessage(
             alt_text='user',
             contents=BubbleContainer.new_from_json_dict(myjson)
         )
-        line_bot_api.reply_message(replyToken, replysticker)
+        line_bot_api.reply_message(replyToken, replymsg)
         return True
 
     # flex: json carousel
     if "flex json carousel controller" in txtmsg.lower():
         template = template_env.get_template('carouselcontroller.json')
         myjson = json.loads( template.render())
-        replysticker = FlexSendMessage(
+        replymsg = FlexSendMessage(
             alt_text='user',
             contents=CarouselContainer.new_from_json_dict(myjson)
         )
-        line_bot_api.reply_message(replyToken, replysticker)
+        line_bot_api.reply_message(replyToken, replymsg)
         return True
     
     return False

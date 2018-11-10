@@ -1,6 +1,10 @@
 import os
-import logging
 import tempfile
+import time
+
+#import threading
+import microgear.client as microgear
+import logging
 
 from flask import Flask, jsonify, request, redirect, make_response, abort
 import linecredential as linecred
@@ -45,6 +49,18 @@ channel_access_token, channel_secret = linecred.LineCredential.extractCredential
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
+##################################
+appid = "napat"
+gearkey = "264hMyPUmYSrXxN"
+gearsecret = "2uA4SYXlPoA8Y2HtjNh7kbxz1"
+
+aliasmy = "python01"
+
+netpiefeedkey = "ZYgTt7VWnMvGtEtu3wkETXPIcpeiP02b"
+
+microgear.create(gearkey, gearsecret,appid, {'debugmode': True})
+
+###################################
 
 @app.route('/', methods=['GET', 'POST'])
 def hello():
@@ -80,16 +96,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    '''
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text))
 
-    line_bot_api.push_message(uid_roona_joe_jj, TextSendMessage(text='Hello World!'))
-
-    # {"message": {"id": "8800975200758", "text": "1234567890", "type": "text"}, "replyToken": "2272640e603b41d3b958bfc708942e4a", "source": {"type": "user", "userId": "U4f3ca59bb9d158c184458043dcc4e339"}, "timestamp": 1541069652411, "type": "message"}
-    print(event)
-    '''
     #print('----')
     #print(event)
     
@@ -98,7 +105,7 @@ def handle_message(event):
     replyToken = event.reply_token
     userId = event.source.user_id
 
-    linehandletextmsg.linehandle_txtmsg(line_bot_api, event, txtmsg, replyToken, userId)
+    linehandletextmsg.linehandle_txtmsg(microgear, line_bot_api, event, txtmsg, replyToken, userId)
 
 
 @handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage))
@@ -303,7 +310,42 @@ def linehandle_beacon(event):
     )
 
 
+def connection():
+    logging.info("Now I am connected with netpie")
+
+def subscription(topic, message):
+    logging.info(topic+"----->"+message)
+
+    if '/napat/linemails' in topic:
+        if 'เร่งแอร์หน่อยมั้ย' in message:
+            line_bot_api.push_message(uid_roona_joe_jj, TextSendMessage(text=message))
+            replymsg = StickerSendMessage(package_id=2, sticker_id=27)
+            line_bot_api.push_message(uid_roona_joe_jj, replymsg)
+        else:
+            line_bot_api.push_message(uid_roona_joe_jj, TextSendMessage(text=message))
+
+def disconnect():
+    logging.info("disconnected")
+
+def writefeed():
+    data = int(time.time()) % 10
+    feeddat = {
+        "var1": data,
+        "var2": (data-1)*10,
+        "var3": (data+5)*20,
+    }
+    microgear.writeFeed("feed0001", feeddat, feedkey=netpiefeedkey)
+
+
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, port=int(
-        os.environ.get('PORT', '5000')))
+
+    microgear.setalias(aliasmy)
+    microgear.on_connect = connection
+    microgear.on_message = subscription
+    microgear.on_disconnect = disconnect
+    microgear.subscribe("/linemails", qos=0)
+    microgear.connect(False)
+
+    app.run(host='0.0.0.0', debug=False, port=int(os.environ.get('PORT', '5000')))
     print('end')

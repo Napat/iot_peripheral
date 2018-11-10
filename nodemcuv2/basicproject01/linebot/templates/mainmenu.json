@@ -3,67 +3,6 @@
     "contents": [
         {
             "type": "bubble",
-            "body": {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "xl",
-                "contents": [
-                    {
-                        "type": "text",
-                        "text": "Check status",
-                        "wrap": true,
-                        "weight": "bold",
-                        "size": "xl"
-                    },
-                    {
-                        "type": "text",
-                        "text": " ",
-                        "wrap": true,
-                        "weight": "bold",
-                        "size": "xl",
-                        "flex": 0
-                    },
-                    {
-                        "type": "button",
-                        "style": "primary",
-                        "action": {
-                            "type": "message",
-                            "label": "TEMP & HUMIDITY",
-                            "text": "temperature & humidity sensor status"
-                        }
-                    },
-                    {
-                        "type": "button",
-                        "style": "primary",
-                        "action": {
-                            "type": "message",
-                            "label": "LAMP",
-                            "text": "lamp status"
-                        }
-                    },
-                    {
-                        "type": "button",
-                        "style": "primary",
-                        "action": {
-                            "type": "message",
-                            "label": "EQUIPMENT #1",
-                            "text": "equipment 1 status"
-                        }
-                    },
-                    {
-                        "type": "button",
-                        "style": "primary",
-                        "action": {
-                            "type": "message",
-                            "label": "EQUIPMENT #2",
-                            "text": "equipment 2 status"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "type": "bubble",
             "hero": {
                 "type": "image",
                 "size": "full",
@@ -197,6 +136,137 @@
                             "type": "message",
                             "label": "ปิด",
                             "text": "ปิดโคมไฟห้องนั่งเล่น"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "bubble",
+            "hero": {
+                "type": "image",
+                "size": "full",
+                "aspectRatio": "1:1",
+                "aspectMode": "cover",
+                "url": "https://ae01.alicdn.com/kf/HTB1v1j5NpXXXXcaXpXXq6xXFXXX2/AC-220.jpg_640x640.jpg"
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "พัดลมห้องรับแขก",
+                        "wrap": true,
+                        "weight": "bold",
+                        "size": "xl"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": " ",
+                                "wrap": true,
+                                "weight": "bold",
+                                "size": "xl",
+                                "flex": 0
+                            },
+                            {
+                                "type": "text",
+                                "text": " ",
+                                "wrap": true,
+                                "weight": "bold",
+                                "size": "sm",
+                                "flex": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                    {
+                        "type": "button",
+                        "style": "primary",
+                        "action": {
+                            "type": "message",
+                            "label": "เปิด",
+                            "text": "เปิดพัดลมห้องรับแขก"
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "action": {
+                            "type": "message",
+                            "label": "ปิด",
+                            "text": "ปิดพัดลมห้องรับแขก"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "xl",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "Check status",
+                        "wrap": true,
+                        "weight": "bold",
+                        "size": "xl"
+                    },
+                    {
+                        "type": "text",
+                        "text": " ",
+                        "wrap": true,
+                        "weight": "bold",
+                        "size": "xl",
+                        "flex": 0
+                    },
+                    {
+                        "type": "button",
+                        "style": "primary",
+                        "action": {
+                            "type": "message",
+                            "label": "TEMP & HUMIDITY",
+                            "text": "temperature & humidity sensor status"
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "style": "primary",
+                        "action": {
+                            "type": "message",
+                            "label": "LAMP",
+                            "text": "lamp status"
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "style": "primary",
+                        "action": {
+                            "type": "message",
+                            "label": "EQUIPMENT #1",
+                            "text": "equipment 1 status"
+                        }
+                    },
+                    {
+                        "type": "button",
+                        "style": "primary",
+                        "action": {
+                            "type": "message",
+                            "label": "EQUIPMENT #2",
+                            "text": "equipment 2 status"
                         }
                     }
                 ]

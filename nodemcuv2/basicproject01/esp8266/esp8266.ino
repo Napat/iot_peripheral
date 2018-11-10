@@ -5,33 +5,48 @@
 #include "dhtlib.h"
 #include "scheduler_millis.h"
 
-#define HWSWITCH D8
+enum button_status{
+	BUTTON_STATUS_PUSH = LOW,
+    BUTTON_STATUS_RELEASE = HIGH
+} button_status_t;
+
+#define BUTTON01 D8
+#define BUTTON02 D7
 
 #define LAMP01 D4
 #define LAMP02 D0
+
+enum load_control{
+	LOAD_CONTROL_ACTIVE = LOW,
+    LOAD_CONTROL_DEACTIVE = HIGH
+} load_control_t;
+
 #define LOAD01 D1
 #define LOAD02 D2
 
 const char *ssid = "JNOTE9";
 const char *password = "xxxxx";
-//const char *ssid = "Neung";
-//const char *password = "xxxxx";
 
-#define APPID "xxxxxxxxxxx"
-#define KEY "xxxxxxxxxxxxxx"
-#define SECRET "xxxxxxxxxxxxxxxxxx"
 
-#define ALIAS_MY "esp8266-01"
+#define APPID "napat"
+#define KEY "264hMyPUmYSrXxN"
+#define SECRET "xxxxx"
 
-#define ALIAS_FB01 "freeboard-01/"ALIAS_MY
-#define ALIAS_FB01TEMP ALIAS_FB01"/temp"
-#define ALIAS_FB01HUMI ALIAS_FB01"/humi"
-#define ALIAS_FB01LAMP01 ALIAS_FB01"/LAMP01"
-#define ALIAS_FB01LAMP02 ALIAS_FB01"/LAMP02"
-#define LINEMSG_MAILS "/linemails"
+#define APPIDPATH  "/napat"
+#define ALIAS_MY "esp8266-01"               // subscribe /<appid>/gearname/ALIAS_MY by default
+#define ALIAS_MY_LAMPS_ENABLE(appidpath)        appidpath"/gearname/"ALIAS_MY"/lamps/enable"        // subscribe: to enable lamps 
+#define ALIAS_MY_LAMP01_LIGHTER_SET(appidpath)  appidpath"/gearname/"ALIAS_MY"/lamp01/lighter/set"  // subscribe: value 0-10
+#define ALIAS_MY_LAMP02_LIGHTER_SET(appidpath)  appidpath"/gearname/"ALIAS_MY"/lamp02/lighter/set"  // subscribe: value 0-10
+#define ALIAS_MY_SENSOR01(appidpath)            appidpath"/gearname/"ALIAS_MY"/sensor01"            // public: temp & humi
+#define ALIAS_MY_LAMP01(appidpath)              appidpath"/gearname/"ALIAS_MY"/lamp01"              // public: get lamp01 status
+#define ALIAS_MY_LAMP02(appidpath)              appidpath"/gearname/"ALIAS_MY"/lamp02"              // public: get lamp02 status
+#define ALIAS_MY_LAMP01_LIGHTER(appidpath)      appidpath"/gearname/"ALIAS_MY"/lamp01/lighter"      // public: get lamp01 lighter
+#define ALIAS_MY_LAMP02_LIGHTER(appidpath)      appidpath"/gearname/"ALIAS_MY"/lamp02/lighter"      // public: get lamp02 lighter
+
+#define LINEMSG_MAILS "/linemails"                                    // public
 
 #define NETPIE_FEED_SENSOR "feedsensor001"
-#define NETPIE_FEED_SENSOR_KEY "xxxxxxxxxxxxxxxxxxxxx"
+#define NETPIE_FEED_SENSOR_KEY "xxxxx"
 
 WiFiClient netpieWifiClient;
 
@@ -43,15 +58,24 @@ double temp = 0;
 
 int linenotifyTempNotReady = 0;
 
+bool lamp01enable = false;
+int lamplighter01 = 10;   // 0-10
+bool lamp02enable = false;
+int lamplighter02 = 10;   // 0-10
+
 void setup()
 {
     Serial.println("Initial...");
     Serial.begin(115200);
 
-    pinMode(HWSWITCH, INPUT_PULLUP);
+    pinMode(BUTTON01, INPUT_PULLUP);
+    pinMode(BUTTON02, INPUT_PULLUP);
 
     pinMode(LAMP01, OUTPUT);
     pinMode(LAMP02, OUTPUT);
+
+    pinMode(LOAD01, OUTPUT);
+    pinMode(LOAD02, OUTPUT);
 
     setup_dhtlib();
     setup_wificlient(ssid, password);
@@ -60,10 +84,12 @@ void setup()
     Serial.println("Starting...");
 
     // netpie: init freeboard values
-    microgear.chat(ALIAS_FB01LAMP01, "OFF");
+    microgear.publish(ALIAS_MY_LAMP01(), "OFF", true);    //microgear.chat(ALIAS_MY"/lamp01", "OFF");
     digitalWrite(LAMP01, HIGH);
-    microgear.chat(ALIAS_FB01LAMP02, "OFF");
+    lamp01enable = false;
+    microgear.publish(ALIAS_MY_LAMP02(), "OFF", true);    //microgear.chat(ALIAS_MY"/lamp02", "OFF");
     digitalWrite(LAMP02, HIGH);
+    lamp02enable = false;
 
 }
 
@@ -98,6 +124,7 @@ void loop()
     if (scheduler_100msec)
     {
         //Serial.println("100 msec");
+        buttonhandler();
     }
 
     if (scheduler_1sec)
@@ -130,25 +157,14 @@ void loop()
             Serial.println("[10 sec]");
             cnt_10sec = 0;
 
-            //Chat with the microgear named ALIAS_FB01TEMP
-            Serial.printf("Publish to %s with %f oC\n", "/gearname/"ALIAS_FB01TEMP, temp);
-            microgear.publish("/gearname/"ALIAS_FB01TEMP, temp, true);    //microgear.chat(ALIAS_FB01TEMP, temp);
-            
-
-            //Chat with the microgear named ALIAS_FB01HUMI
-            Serial.printf("Publish to %s with %f %%\n", "/gearname/"ALIAS_FB01HUMI, humi);
-            microgear.publish("/gearname/"ALIAS_FB01HUMI, humi, true);   //microgear.chat(ALIAS_FB01HUMI, humi);
-
-            //Chat with the microgear named ALIAS_FB01
+            //Chat with the microgear named ALIAS_MY_SENSOR01
             String freeboardChatStr = (String)temp + "," + (String)humi;
-            Serial.printf("Publish to %s\n", ALIAS_FB01);
-            microgear.chat(ALIAS_FB01, freeboardChatStr);
+            Serial.printf("Publish to %s with temp: %f oC humi: %f %%\n", ALIAS_MY_SENSOR01(), temp, humi);
+            //microgear.chat(ALIAS_MY_SENSOR01(), freeboardChatStr);
+            microgear.publish(ALIAS_MY_SENSOR01(), freeboardChatStr, true);
 
             // writeFeed 
-            String netpiefeeddat = "{temp01:" + (String)temp 
-                                    + ",humi01:" + (String)humi 
-                                    + "}";
-            microgear.writeFeed(NETPIE_FEED_SENSOR, netpiefeeddat, NETPIE_FEED_SENSOR_KEY);
+            netpieWriteFeed(temp, humi);
 
             // line notify too hot
             if( temp >= 25)
@@ -170,6 +186,34 @@ void loop()
 
 }
 
+void buttonhandler()
+{
+    if( digitalRead(BUTTON01) == BUTTON_STATUS_PUSH)
+    {
+        digitalWrite( LOAD01, LOAD_CONTROL_ACTIVE);  
+    }
+    else
+    {
+        digitalWrite( LOAD01, LOAD_CONTROL_DEACTIVE);  
+    }
+
+    if( digitalRead(BUTTON_02) == BUTTON_STATUS_PUSH)
+    {
+        digitalWrite( LOAD02, LOAD_CONTROL_ACTIVE);  
+    }
+    else
+    {
+        digitalWrite( LOAD02, LOAD_CONTROL_DEACTIVE);  
+    }
+}
+
+void netpieWriteFeed(float temp, float humi)
+{
+    String feeddata = "{temp01:" + (String)temp 
+                            + ",humi01:" + (String)humi 
+                            + "}";
+    microgear.writeFeed(NETPIE_FEED_SENSOR, feeddata, NETPIE_FEED_SENSOR_KEY);
+}
 
 // If a new message arrives, do this
 void onMsghandler(char *topic, uint8_t *msg, unsigned int msglen)
@@ -189,32 +233,86 @@ void onMsghandler(char *topic, uint8_t *msg, unsigned int msglen)
     }
     Serial.println();
 
-    String lampStatus = String(strState).substring(0, msglen);
+    String strmsg = String(strState).substring(0, msglen);
 
-    processMsg(lampStatus);
+    if(strcmp(topic, APPIDPATH"/gearname/"ALIAS_MY) == 0)
+    {
+        Serial.printf("!!!! default topic: %s\n", topic);
+    }
+    else if(strcmp(topic, ALIAS_MY_LAMPS_ENABLE(APPIDPATH)) == 0)
+    {
+        processMsgLamp(strmsg);
+    }
+    else if(strcmp(topic, ALIAS_MY_LAMP01_LIGHTER_SET(APPIDPATH)) == 0)
+    {
+        Serial.println("lamplighter01: 1023 - ( 100 x "+ strmsg + " )");
+        lamplighter01 = 1023 - (100 * atoi(strmsg.c_str()));
+        microgear.publish(ALIAS_MY_LAMP01_LIGHTER(), strmsg, true);
+        if(lamp01enable == true)
+        {
+            analogWrite(LAMP01, lamplighter01);   // 0 to 1023
+        }
+        else
+        {
+            digitalWrite(LAMP01, HIGH);
+        }
+    }
+    else if(strcmp(topic, ALIAS_MY_LAMP02_LIGHTER_SET(APPIDPATH)) == 0)
+    {
+        Serial.println("lamplighter02: 1023 - ( 100 x "+ strmsg + " )");
+        lamplighter02 = 1023 - (100 * atoi(strmsg.c_str()));
+        microgear.publish(ALIAS_MY_LAMP02_LIGHTER(), strmsg, true);
+        if(lamp02enable == true)
+        {
+            analogWrite(LAMP02, lamplighter02);   // 0 to 1023
+        }
+        else
+        {
+            digitalWrite(LAMP02, HIGH);
+        }
+    }
+    else
+    {
+        Serial.println("???????? unknown topic ???");
+        Serial.println(topic);
+        Serial.println(APPIDPATH"/gearname/"ALIAS_MY);
+        Serial.println(ALIAS_MY_LAMPS_ENABLE(APPIDPATH));
+        Serial.println(ALIAS_MY_LAMP01_LIGHTER_SET(APPIDPATH));
+        Serial.println(ALIAS_MY_LAMP02_LIGHTER_SET(APPIDPATH));
+    }
 }
 
-void processMsg(String lampStatus)
+void processMsgLamp(String lampStatus)
 {
     if (lampStatus == "LAMP01=ON")
-    {
-        digitalWrite(LAMP01, LOW);
-        microgear.publish("/gearname/"ALIAS_FB01LAMP01, "ON", true); //microgear.chat(ALIAS_FB01LAMP01, "ON");
+    {   
+        //digitalWrite(LAMP01, LOW);
+        analogWrite(LAMP01, lamplighter01);   // 0 to 1023
+        microgear.publish(ALIAS_MY_LAMP01(), "ON", true);    //microgear.chat(ALIAS_MY"/lamp01", "ON");
+        lamp01enable = true;
     }
     else if (lampStatus == "LAMP01=OFF")
     {
         digitalWrite(LAMP01, HIGH);
-        microgear.chat(ALIAS_FB01LAMP01, "OFF");
+        microgear.publish(ALIAS_MY_LAMP01(), "OFF", true);    //microgear.chat(ALIAS_MY"/lamp01", "OFF");
+        lamp01enable = false;
     }
     else if (lampStatus == "LAMP02=ON")
     {
-        digitalWrite(LAMP02, LOW);
-        microgear.chat(ALIAS_FB01LAMP02, "ON");
+        //digitalWrite(LAMP02, LOW);
+        analogWrite(LAMP02, lamplighter02);   // 0 to 1023
+        microgear.publish(ALIAS_MY_LAMP02(), "ON", true);    //microgear.chat(ALIAS_MY"/lamp02", "ON");
+        lamp02enable = true;
     }
     else if (lampStatus == "LAMP02=OFF")
     {
         digitalWrite(LAMP02, HIGH);
-        microgear.chat(ALIAS_FB01LAMP02, "OFF");
+        microgear.publish(ALIAS_MY_LAMP02(), "OFF", true);    //microgear.chat(ALIAS_MY"/lamp02", "OFF");
+        lamp02enable = false;
+    }
+    else
+    {
+        Serial.printf("Unknown message at %s(%d)\n", __FUNCTION__, __LINE__);
     }
 }
 
@@ -240,6 +338,9 @@ void onConnected(char *attribute, uint8_t *msg, unsigned int msglen)
     Serial.println("Connected to NETPIE...");
     // Set the alias of this microgear ALIAS_MY
     microgear.setAlias(ALIAS_MY);
+    microgear.subscribe(ALIAS_MY_LAMPS_ENABLE());
+    microgear.subscribe(ALIAS_MY_LAMP01_LIGHTER_SET());
+    microgear.subscribe(ALIAS_MY_LAMP02_LIGHTER_SET());
 }
 
 void setup_microgear()

@@ -5,7 +5,7 @@
 //#include <ESP8266WiFi.h>
 
 // Line config
-#define LINE_TOKEN "JiECD9xk3c2uZ4vDEgwTo4FrP2Jo066Dme3vNrEAeCe"
+#define LINE_TOKEN "xxxxx"
 
 void LineNotify(String message);
 
