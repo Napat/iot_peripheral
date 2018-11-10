@@ -1,0 +1,415 @@
+{
+ "version": "application/octet-stream",
+ "allow_edit": true,
+ "plugins": [],
+ "panes": [
+  {
+   "title": "SENSOR FEEDER",
+   "width": 1,
+   "row": {
+    "3": 1,
+    "4": 1,
+    "5": 1,
+    "6": 1
+   },
+   "col": {
+    "3": 1,
+    "4": 2,
+    "5": 1,
+    "6": 3
+   },
+   "col_width": "3",
+   "widgets": [
+    {
+     "type": "FeedView",
+     "settings": {
+      "title": "Room1",
+      "datasource": "datasources[\"feedsensor001\"][\"data\"]",
+      "type": "line",
+      "yzero": true,
+      "color": "",
+      "marker": true,
+      "multipleaxis": false,
+      "autogap": false,
+      "height_block": "300",
+      "height": "5"
+     }
+    }
+   ]
+  },
+  {
+   "title": "Controller Spliter",
+   "width": 1,
+   "row": {
+    "3": 13,
+    "4": 1,
+    "5": 1,
+    "6": 13
+   },
+   "col": {
+    "3": 1,
+    "4": 1,
+    "5": 4,
+    "6": 3
+   },
+   "col_width": 1,
+   "widgets": [
+    {
+     "type": "gauge",
+     "settings": {
+      "title": "Temperature-spliter",
+      "value": "datasources[\"freeboard-01\"][\"/napat/gearname/esp8266-01/sensor01\"].split(',')[0]",
+      "units": "oC",
+      "min_value": 0,
+      "max_value": 100
+     }
+    },
+    {
+     "type": "text_widget",
+     "settings": {
+      "title": "Temperature-spliter",
+      "size": "regular",
+      "value": "datasources[\"freeboard-01\"][\"/napat/gearname/esp8266-01/sensor01\"].split(',')[0]",
+      "sparkline": true,
+      "animate": true,
+      "units": "oC"
+     }
+    },
+    {
+     "type": "gauge",
+     "settings": {
+      "title": "Humidity-spliter",
+      "value": "datasources[\"freeboard-01\"][\"/napat/gearname/esp8266-01/sensor01\"].split(',')[1]",
+      "units": "%",
+      "min_value": 0,
+      "max_value": 100
+     }
+    },
+    {
+     "type": "text_widget",
+     "settings": {
+      "title": "Humidity-spliter",
+      "size": "regular",
+      "value": "datasources[\"freeboard-01\"][\"/napat/gearname/esp8266-01/sensor01\"].split(',')[1]",
+      "sparkline": true,
+      "animate": true,
+      "units": "%"
+     }
+    }
+   ]
+  },
+  {
+   "title": "Light Controller",
+   "width": 1,
+   "row": {
+    "3": 13,
+    "4": 13,
+    "5": 1,
+    "6": 1
+   },
+   "col": {
+    "3": 2,
+    "4": 2,
+    "5": 5,
+    "6": 6
+   },
+   "col_width": 1,
+   "widgets": [
+    {
+     "type": "indicator",
+     "settings": {
+      "title": "LAMP1",
+      "value": "datasources[\"freeboard-01\"][\"/napat/gearname/esp8266-01/lamp01\"].split(',')[0]==\"ON\"",
+      "on_text": "on",
+      "off_text": "off"
+     }
+    },
+    {
+     "type": "Toggle",
+     "settings": {
+      "caption": "lamp-splitter 1",
+      "state": "datasources[\"freeboard-01\"][\"/napat/gearname/esp8266-01/lamp01\"].split(',')[0]==\"ON\"",
+      "ontext": "ON",
+      "offtext": "OFF",
+      "onaction": "microgear['freeboard-01'].chat(\"esp8266-01/lamps/enable\",\"LAMP01=ON\");",
+      "offaction": "microgear['freeboard-01'].chat(\"esp8266-01/lamps/enable\",\"LAMP01=OFF\");"
+     }
+    },
+    {
+     "type": "Slider",
+     "settings": {
+      "caption": "brightness",
+      "color": "blue",
+      "showvalue": 1,
+      "min": 0,
+      "max": "10",
+      "step": "1",
+      "initialvalue": "10",
+      "autovaluesource": "",
+      "onStart": "microgear['freeboard-01'].chat(\"esp8266-01/lamp01/lighter/set\", value);",
+      "onSlide": "microgear['freeboard-01'].chat(\"esp8266-01/lamp01/lighter/set\", value);",
+      "onStop": "microgear['freeboard-01'].chat(\"esp8266-01/lamp01/lighter/set\", value);",
+      "onCreatedAction": ""
+     }
+    },
+    {
+     "type": "indicator",
+     "settings": {
+      "title": "LAMP2",
+      "value": "datasources[\"freeboard-01\"][\"/napat/gearname/esp8266-01/lamp02\"].split(',')[0]==\"ON\"",
+      "on_text": "on",
+      "off_text": "off"
+     }
+    },
+    {
+     "type": "Toggle",
+     "settings": {
+      "caption": "lamp-splitter 2",
+      "state": "datasources[\"freeboard-01\"][\"/napat/gearname/esp8266-01/lamp02\"].split(',')[0]==\"ON\"",
+      "ontext": "ON",
+      "offtext": "OFF",
+      "onaction": "microgear['freeboard-01'].chat(\"esp8266-01/lamps/enable\",\"LAMP02=ON\");",
+      "offaction": "microgear['freeboard-01'].chat(\"esp8266-01/lamps/enable\",\"LAMP02=OFF\");"
+     }
+    },
+    {
+     "type": "Slider",
+     "settings": {
+      "caption": "brightness",
+      "color": "blue",
+      "showvalue": 1,
+      "min": 0,
+      "max": "10",
+      "step": "1",
+      "initialvalue": "10",
+      "autovaluesource": "",
+      "onStart": "microgear['freeboard-01'].chat(\"esp8266-01/lamp02/lighter/set\", value);",
+      "onSlide": "microgear['freeboard-01'].chat(\"esp8266-01/lamp02/lighter/set\", value);",
+      "onStop": "microgear['freeboard-01'].chat(\"esp8266-01/lamp02/lighter/set\", value);",
+      "onCreatedAction": ""
+     }
+    }
+   ]
+  },
+  {
+   "title": "LOAD Controller",
+   "width": 1,
+   "row": {
+    "3": 13,
+    "4": 13,
+    "5": 15,
+    "6": 13
+   },
+   "col": {
+    "3": 3,
+    "4": 3,
+    "5": 5,
+    "6": 5
+   },
+   "col_width": 1,
+   "widgets": [
+    {
+     "type": "Toggle",
+     "settings": {
+      "caption": "LOAD01",
+      "ontext": "ON",
+      "offtext": "OFF",
+      "onaction": "microgear['freeboard-01'].chat(\"esp8266-01/load/enable\",\"LOAD01=ON\");",
+      "offaction": "microgear['freeboard-01'].chat(\"esp8266-01/load/enable\",\"LOAD01=OFF\");"
+     }
+    },
+    {
+     "type": "Toggle",
+     "settings": {
+      "caption": "LOAD02",
+      "ontext": "ON",
+      "offtext": "OFF",
+      "onaction": "microgear['freeboard-01'].chat(\"esp8266-01/load/enable\",\"LOAD02=ON\");",
+      "offaction": "microgear['freeboard-01'].chat(\"esp8266-01/load/enable\",\"LOAD02=OFF\");"
+     }
+    }
+   ]
+  },
+  {
+   "title": "Python Controller",
+   "width": 1,
+   "row": {
+    "3": 35,
+    "4": 27,
+    "5": 13,
+    "6": 35,
+    "7": 1
+   },
+   "col": {
+    "3": 1,
+    "4": 2,
+    "5": 1,
+    "6": 2,
+    "7": 1
+   },
+   "col_width": "3",
+   "widgets": [
+    {
+     "type": "Slider",
+     "settings": {
+      "caption": "Slider Data",
+      "color": "blue",
+      "showvalue": 1,
+      "min": 0,
+      "max": "1000",
+      "step": 1,
+      "initialvalue": "0",
+      "onStart": "microgear['freeboard-01'].chat(\"python01\", value + '  ' + (percent*100).toFixed(2) +'%')",
+      "onSlide": "microgear['freeboard-01'].chat(\"python01\", value + '  ' + (percent*100).toFixed(2) +'%')",
+      "onStop": "microgear['freeboard-01'].chat(\"python01\", value + '  ' + (percent*100).toFixed(2) +'%')"
+     }
+    },
+    {
+     "type": "Button",
+     "settings": {
+      "caption": "Send mail",
+      "text": "Send mail",
+      "color": "blue",
+      "onClick": "microgear['freeboard-01'].chat(\"/napat/mails\",\"Hello world\")"
+     }
+    }
+   ]
+  },
+  {
+   "width": 1,
+   "row": {
+    "3": 41,
+    "4": 43,
+    "5": 23,
+    "6": 41,
+    "7": 29,
+    "9": 29
+   },
+   "col": {
+    "3": 1,
+    "4": 2,
+    "5": 4,
+    "6": 2,
+    "7": 1,
+    "9": 1
+   },
+   "col_width": "2",
+   "widgets": [
+    {
+     "type": "FeedView",
+     "settings": {
+      "title": "Python Data Feeder 1",
+      "datasource": "datasources[\"feed-01\"][\"data\"]",
+      "type": "line",
+      "color": "",
+      "marker": true,
+      "multipleaxis": false,
+      "autogap": false,
+      "height_block": "300",
+      "height": "5"
+     }
+    }
+   ]
+  },
+  {
+   "title": "html5 webapp",
+   "width": 1,
+   "row": {
+    "3": 53,
+    "4": 33,
+    "5": 19,
+    "6": 53,
+    "9": 53
+   },
+   "col": {
+    "3": 1,
+    "4": 2,
+    "5": 1,
+    "6": 2,
+    "9": 1
+   },
+   "col_width": "3",
+   "widgets": [
+    {
+     "type": "indicator",
+     "settings": {
+      "title": "html5Lanp",
+      "value": "datasources[\"freeboard-01\"][\"/napat/gearname/freeboard-01/webapp/lamp\"].split(',')[0]==\"ON\"",
+      "on_text": "ON",
+      "off_text": "OFF"
+     }
+    },
+    {
+     "type": "Button",
+     "settings": {
+      "caption": "Update gage temperature01",
+      "text": "Temperature01",
+      "color": "red",
+      "onClick": "microgear['freeboard-01'].chat('webapp','{\"temp01\":35}');"
+     }
+    },
+    {
+     "type": "Button",
+     "settings": {
+      "caption": "Update gage humidity01",
+      "text": "Humidity01",
+      "color": "yellow",
+      "onClick": "microgear['freeboard-01'].chat('webapp','{\"humi01\":70}');"
+     }
+    },
+    {
+     "type": "Button",
+     "settings": {
+      "caption": "update all gages",
+      "text": "All gages",
+      "color": "blue",
+      "onClick": "microgear['freeboard-01'].chat('webapp','{\"temp01\":25, \"humi01\":55}')"
+     }
+    }
+   ]
+  }
+ ],
+ "datasources": [
+  {
+   "name": "freeboard-01",
+   "type": "netpie_microgear",
+   "settings": {
+    "name": "freeboard-01",
+    "appid": "napat",
+    "key": "264hMyPUmYSrXxN",
+    "secret": "xxxx",
+    "topics": "/#"
+   }
+  },
+  {
+   "name": "feed-01",
+   "type": "netpie_feed",
+   "settings": {
+    "name": "feed-01",
+    "feedid": "feed0001",
+    "apikey": "xxxx",
+    "granularity_value": "10",
+    "granularity_unit": "seconds",
+    "since_value": "6",
+    "since_unit": "hours",
+    "interval": "15"
+   }
+  },
+  {
+   "name": "feedsensor001",
+   "type": "netpie_feed",
+   "settings": {
+    "name": "feedsensor001",
+    "feedid": "feedsensor001",
+    "apikey": "xxxxx",
+    "granularity_value": "10",
+    "granularity_unit": "seconds",
+    "since_value": "2",
+    "since_unit": "hours",
+    "interval": "10"
+   }
+  }
+ ],
+ "columns": 5,
+ "theme": "default"
+}
